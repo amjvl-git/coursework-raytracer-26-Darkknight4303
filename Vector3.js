@@ -35,19 +35,19 @@ class Vec3
     // Calculate the dot product of this vector with the other and return the result
     dot(other)
     {
-        return this.x * other.x + this.y * other.y + this.z * other.z
+        return ((this.x * other.x) + (this.y * other.y) + (this.z * other.z))
     }
 
     // Calculate and return the magnitude of this vector
     magnitude()
     {
-        return Math.sqrt((this.x ** 2)+ (this.y **2)+ (this.z ** 2))
+        return Math.sqrt((this.x ** 2) + (this.y **2) + (this.z ** 2))
     }
     
     // Calculate and return the magnitude of this vector without the square root
     magnitudeSquared()
     {
-        return (this.x ** 2)+ (this.y **2)+ (this.z ** 2)
+        return ((this.x ** 2) + (this.y **2) + (this.z ** 2))
     }
 
     // Return a normalised version of this vector
