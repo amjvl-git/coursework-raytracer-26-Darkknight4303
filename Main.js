@@ -8,7 +8,7 @@ let intersectionNormal
 
 const spheres = new Array(
     new Sphere(new Vec3(0,0,-1), 0.3, new Vec3(1,0,0)),       // Red sphere
-    new Sphere(new Vec3(0,0.2,-0.8), 0.15, new Vec3(0,0,1)),  // Blue sphere
+    new Sphere(new Vec3(0,0.3,-0.8), 0.15, new Vec3(0,0,1)),  // Blue sphere
     new Sphere(new Vec3(0,-100.5,-1), 100, new Vec3(0,1,0)),   // Big green sphere
     new Sphere(new Vec3(1,0,-1.2), 0.4, new Vec3(1,1,1))
     );
@@ -39,10 +39,10 @@ for (let i = 0; i < imageWidth; i++)
 
         let ray = new Ray(camPosition, lowerLeftCorner.add(horizontal.scale(u)).add(vertical.scale(v)).minus(camPosition))
         colour = rayColour(ray)
-        colour = colour.scale(1)
-        let gammaCorrect = new Vec3(Math.sqrt(colour.x), Math.sqrt(colour.y), Math.sqrt(colour.z))
-        colour = gammaCorrect.scale(255)
-        // colour = rayColour(ray).scale(255)
+        // colour = colour.scale(0.9)
+        // let gammaCorrect = new Vec3(Math.sqrt(colour.x), Math.sqrt(colour.y), Math.sqrt(colour.z))
+        // colour = gammaCorrect.scale(255)
+        colour = rayColour(ray).scale(255)
         setPixel(i,j,colour)
     }
     }
@@ -103,7 +103,7 @@ function rayColour(ray)
     let shadowCastRes = traceRay(shadow)
     let reflectionVec = lightDirection.minus(castResult.normal.scale(2 * castResult.normal.dot(lightDirection)))
     let viewDirection = camPosition.minus(castResult.position)
-    let specCont = Math.pow(Math.max(viewDirection.dot(reflectionVec), 0), 5) * 0.8
+    let specCont = Math.pow(Math.max(viewDirection.dot(reflectionVec), 0), 10) * 0.8
 
     let albedo = spheres[castResult.sphereIndex].colour
     let diffuse = Math.max(castResult.normal.dot(negLightDirection), 0)
