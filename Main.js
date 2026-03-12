@@ -45,7 +45,6 @@ for (let i = 0; i < imageWidth; i++)
         colour = colour.scale(1/75)
         let gammaCorrect = new Vec3(Math.sqrt(colour.x), Math.sqrt(colour.y), Math.sqrt(colour.z))
         colour = gammaCorrect.scale(255)
-        // colour = rayColour(ray).scale(255)
         setPixel(i,j,colour)
     }
     }
@@ -110,7 +109,6 @@ function rayColour(ray)
 
     let albedo = spheres[castResult.sphereIndex].colour
     let diffuse = Math.max(castResult.normal.dot(negLightDirection), 0)
-    // let colour = albedo.scale(diffuse)
 
     let colour = albedo.scale(0.05 + diffuse + specCont)
     if (shadowCastRes.t > 0) colour = colour.scale(0.4)
