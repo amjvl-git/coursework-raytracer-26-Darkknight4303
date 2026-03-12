@@ -19,10 +19,10 @@ class Sphere
         let o_minus_c = ray.origin.minus(this.centre)
         let b = 2 * o_minus_c.dot(ray.direction)
         let c = o_minus_c.dot(o_minus_c) - this.radius**2
-        let desc = b**2 - 4*a*c 
+        let disc = b**2 - 4*a*c 
 
-        if (desc > 0) {
-            return (-b-Math.sqrt(desc)) / (2*a)
+        if (disc > 0) {
+            return (-b-Math.sqrt(disc)) / (2*a)
         }
         else {
             return -1

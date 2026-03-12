@@ -33,11 +33,16 @@ for (let i = 0; i < imageWidth; i++)
 {
     for (let j = 0; j <= imageHeight; j++)
     {
+        
         let u = i / (imageWidth-1)
         let v = j / (imageHeight-1)
 
         let ray = new Ray(camPosition, lowerLeftCorner.add(horizontal.scale(u)).add(vertical.scale(v)).minus(camPosition))
-        colour = rayColour(ray).scale(255)
+        colour = rayColour(ray)
+        colour = colour.scale(1)
+        let gammaCorrect = new Vec3(Math.sqrt(colour.x), Math.sqrt(colour.y), Math.sqrt(colour.z))
+        colour = gammaCorrect.scale(255)
+        // colour = rayColour(ray).scale(255)
         setPixel(i,j,colour)
     }
     }
@@ -94,18 +99,18 @@ function rayColour(ray)
     let lightDirection = new Vec3(-1.1,-1.3,-1.5).normalised()
     let negLightDirection = new Vec3(-lightDirection.x,-lightDirection.y,-lightDirection.z)
 
-    // let shadow = new Ray(castResult.position, negLightDirection)
-    // let shadowCastRes = traceRay(shadow)
-    // let reflectionVec = lightDirection.minus(castResult.normal.scale(2 * castResult.normal.dot(lightDirection)))
-    // let viewDirection = camPosition.minus(castResult.position)
-    // let specCont = Math.pow(Math.max(viewDirection.dot(reflectionVec), 0), 5) * 0.8
+    let shadow = new Ray(castResult.position, negLightDirection)
+    let shadowCastRes = traceRay(shadow)
+    let reflectionVec = lightDirection.minus(castResult.normal.scale(2 * castResult.normal.dot(lightDirection)))
+    let viewDirection = camPosition.minus(castResult.position)
+    let specCont = Math.pow(Math.max(viewDirection.dot(reflectionVec), 0), 5) * 0.8
 
     let albedo = spheres[castResult.sphereIndex].colour
     let diffuse = Math.max(castResult.normal.dot(negLightDirection), 0)
-    let colour = albedo.scale(diffuse)
+    // let colour = albedo.scale(diffuse)
 
-    // let colour = albedo.scale(0.05 + diffuse + specCont)
-    // if (shadowCastRes.t > 0) colour = colour.scale(0.4)
+    let colour = albedo.scale(0.05 + diffuse + specCont)
+    if (shadowCastRes.t > 0) colour = colour.scale(0.4)
 
     return colour
 }
