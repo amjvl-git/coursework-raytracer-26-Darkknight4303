@@ -27,22 +27,25 @@ let horizontal = new Vec3(viewportWidth, 0, 0)
 let vertical = new Vec3(0, viewportHeight, 0)
 let lowerLeftCorner = camPosition.minus(horizontal.scale(0.5)).minus(vertical.scale(0.5)).minus(new Vec3(0,0, focalLength))
 
-let colour = new Vec3(0,0,0)
-
 for (let i = 0; i < imageWidth; i++)
 {
     for (let j = 0; j <= imageHeight; j++)
     {
-        
-        let u = i / (imageWidth-1)
-        let v = j / (imageHeight-1)
+        let colour = new Vec3(0,0,0)
+        for (let k = 0; k < 50; k++)
+        {
+            let u = i / (imageWidth-1)
+            let v = j / (imageHeight-1)
+            let dir = lowerLeftCorner.add(horizontal.scale(u)).add(vertical.scale(v)).minus(camPosition)
+            dir = dir.add(new Vec3(Math.random() / imageWidth, Math.random() / imageHeight, 0))
+            let ray = new Ray(camPosition, dir)
+            colour = colour.add(rayColour(ray))
+        }
 
-        let ray = new Ray(camPosition, lowerLeftCorner.add(horizontal.scale(u)).add(vertical.scale(v)).minus(camPosition))
-        colour = rayColour(ray)
-        // colour = colour.scale(0.9)
-        // let gammaCorrect = new Vec3(Math.sqrt(colour.x), Math.sqrt(colour.y), Math.sqrt(colour.z))
-        // colour = gammaCorrect.scale(255)
-        colour = rayColour(ray).scale(255)
+        colour = colour.scale(1/75)
+        let gammaCorrect = new Vec3(Math.sqrt(colour.x), Math.sqrt(colour.y), Math.sqrt(colour.z))
+        colour = gammaCorrect.scale(255)
+        // colour = rayColour(ray).scale(255)
         setPixel(i,j,colour)
     }
     }
@@ -103,7 +106,7 @@ function rayColour(ray)
     let shadowCastRes = traceRay(shadow)
     let reflectionVec = lightDirection.minus(castResult.normal.scale(2 * castResult.normal.dot(lightDirection)))
     let viewDirection = camPosition.minus(castResult.position)
-    let specCont = Math.pow(Math.max(viewDirection.dot(reflectionVec), 0), 10) * 0.8
+    let specCont = Math.pow(Math.max(viewDirection.dot(reflectionVec), 0), 5) * 0.8
 
     let albedo = spheres[castResult.sphereIndex].colour
     let diffuse = Math.max(castResult.normal.dot(negLightDirection), 0)
